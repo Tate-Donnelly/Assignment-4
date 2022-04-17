@@ -182,9 +182,9 @@ public class ElbonianArabicConverter {
     
             if (!isMagnitudeCorrect(numberStr)) {
                 throw new MalformedNumberException("The magnitude is not correct");
-            }else{
-                throw new MalformedNumberException("Is Arabic, expected Elbonian");
             }
+        }else{
+            throw new MalformedNumberException("Is Arabic, expected Elbonian");
         }
     }
     
@@ -304,7 +304,6 @@ public class ElbonianArabicConverter {
     private boolean isMagnitudeCorrect(String number) {
             int first = Integer.parseInt(String.valueOf(number.charAt(0)));
             char[] lastPart = number.toCharArray();
-            System.out.println(number);
     
             if (number.length() >= 2) {
         
