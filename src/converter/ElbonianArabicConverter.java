@@ -32,8 +32,8 @@ public class ElbonianArabicConverter {
      */
     public ElbonianArabicConverter(String number) throws MalformedNumberException, ValueOutOfBoundsException {
         // TODO check to see if the number is valid, then set it equal to the string
-        this.number = number;
-        
+        this.number = number.trim();
+
     }
 
     /**
@@ -44,7 +44,7 @@ public class ElbonianArabicConverter {
      */
     public int toArabic() throws MalformedNumberException, ValueOutOfBoundsException  {
         checkForErrorsArabic();
-        
+        boolean isNegative = false;
         char[] charArray = number.toCharArray();
         int total = 0;
         for(char ch : charArray){
@@ -75,51 +75,64 @@ public class ElbonianArabicConverter {
                     break;
                 case 'Z':
                     break;
+                case '-':
+                    isNegative = true;
+                    break;
+
             }
         }
+        if(isNegative){
+            total = -total;
+        }
+
         return total;
     }
-
     /**
      * Converts the number to an Elbonian numeral or returns the current value if it is already in the Elbonian form.
      *
      * @return An Elbonian value
      */
-    boolean negative=false;
     public String toElbonian() throws MalformedNumberException, ValueOutOfBoundsException {
         checkForErrorsElbonian();
-        if(isInteger(number)) {
-            if (number.charAt(0) == '-' && !negative) {
-                System.out.println("It's negative");
-                negative = true;
-                return toElbonian();
-            } else if (Integer.parseInt(number) > 3000) {//N
-                return "N" + toElbonian();
-            } else if (Integer.parseInt(number) > 1000) {//M
-                return "M" + toElbonian();
-            } else if (Integer.parseInt(number) > 300) {//D
-                return "D" + toElbonian();
-            } else if (Integer.parseInt(number) > 100) {//C
-                return "C" + toElbonian();
-            } else if (Integer.parseInt(number) > 30) {//L
-                return "L" + toElbonian();
-            } else if (Integer.parseInt(number) > 10) {//X
-                return "X" + toElbonian();
-            } else if (Integer.parseInt(number) > 3) {
-                return "V" + toElbonian();
-            } else if (Integer.parseInt(number) > 1) {
-                return "V" + toElbonian();
-            } else if (Integer.parseInt(number) == 0) {
-                return "Z";
-            }
-            return null;
-        }
-        return number;
+        int ebloNum = Integer.parseInt(number);
+        return createElbonian(ebloNum);
     }
+
+    private String createElbonian(int elboNum) throws MalformedNumberException, ValueOutOfBoundsException {
+
+
+            if (elboNum < 0) {
+                return "-" + createElbonian(Math.abs(elboNum));
+            } else if (elboNum >= 3000) {//N
+                return "N" + createElbonian(elboNum - 3000);
+            } else if (elboNum >= 1000) {//M
+                return "M" + createElbonian(elboNum - 1000);
+            } else if (elboNum >= 300) {//D
+                return "D" + createElbonian(elboNum - 300);
+            } else if (elboNum >= 100) {//C
+                return "C" + createElbonian(elboNum - 100);
+            } else if (elboNum >= 30) {//L
+                return "L" + createElbonian(elboNum - 30);
+            } else if (elboNum >= 10) {//X
+                return "X" + createElbonian(elboNum - 10);
+            } else if (elboNum >= 3) {
+                return "V" + createElbonian(elboNum - 3);
+            } else if (elboNum >= 1) {
+                return "I";
+            } else if(elboNum == 0 && Integer.parseInt(number) == elboNum){
+                return "Z";
+        }
+            return "";
+    }
+
     
     private void checkForErrorsElbonian() throws ValueOutOfBoundsException, MalformedNumberException {
-        checkMagnitude();
-        
+        int elboNum = Integer.parseInt(number);
+
+        if(elboNum > 9999 || elboNum < -9999){
+            throw new ValueOutOfBoundsException("Number must be between -9999 and 9999!");
+        }
+
         /*10 The range of numbers that can be represented by Elbonian numerals are the integers from -9999 to 9999.
         All Arabic integer inputs outside that range will result in a ValueOutOfBounds exception. All other input
         errors will result in MalformedNumber exceptions.
@@ -190,7 +203,6 @@ public class ElbonianArabicConverter {
     
     public void checkForErrorsArabic() throws MalformedNumberException, ValueOutOfBoundsException {
         checkMagnitude();
-        checkForErrorsElbonian();
         //1. The following letters – M, C, X, and I – can each be repeated up to two times in a row. For example,
         char[] charArray = number.toCharArray();
         for(int i = 0; i < charArray.length - 2; i++){
