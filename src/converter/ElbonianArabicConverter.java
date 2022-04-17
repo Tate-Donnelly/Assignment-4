@@ -95,7 +95,8 @@ public class ElbonianArabicConverter {
     public String toElbonian() throws MalformedNumberException, ValueOutOfBoundsException {
         checkForErrorsElbonian();
         int ebloNum = Integer.parseInt(number);
-        return createElbonian(ebloNum);
+        String elboStr = createElbonian(ebloNum);
+        return elboStr;
     }
 
     private String createElbonian(int elboNum) throws MalformedNumberException, ValueOutOfBoundsException {
@@ -117,9 +118,11 @@ public class ElbonianArabicConverter {
                 return "X" + createElbonian(elboNum - 10);
             } else if (elboNum >= 3) {
                 return "V" + createElbonian(elboNum - 3);
-            } else if (elboNum >= 1) {
+            } else if (elboNum >= 2) {
+                return "I" + createElbonian(elboNum - 1);
+            }else if (elboNum == 1) {
                 return "I";
-            } else if(elboNum == 0 && Integer.parseInt(number) == elboNum){
+            }else if(elboNum == 0 && Integer.parseInt(number) == elboNum){
                 return "Z";
         }
             return "";
@@ -127,6 +130,12 @@ public class ElbonianArabicConverter {
 
     
     private void checkForErrorsElbonian() throws ValueOutOfBoundsException, MalformedNumberException {
+        try{
+            Integer.parseInt(number);
+        }catch (NumberFormatException e){
+            throw new MalformedNumberException("String is not a number!");
+        }
+
         if(isSpaceInBetween()) {
             throw new MalformedNumberException("Spaces found in between chars (11)");
         }else{
@@ -276,7 +285,7 @@ public class ElbonianArabicConverter {
         }
     
         if(counter >= i && number.contains(cannotAppear)){
-            throw new MalformedNumberException("Error! Cannot have 3 D's and have an C appear");
+            throw new MalformedNumberException("Error! Cannot have " + i + " " + appearsMultipleTimes + "'s and have an " + cannotAppear + " appear");
         }
     }
     

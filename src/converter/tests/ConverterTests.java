@@ -260,4 +260,22 @@ public class ConverterTests {
         int test= converter.toArabic();
     }
 
+    @Test
+    public void test13() throws MalformedNumberException, ValueOutOfBoundsException {
+        for(int i = -9999; i <= 9999; i++){
+            ElbonianArabicConverter converter = new ElbonianArabicConverter(String.valueOf(i));
+            String elboNum = converter.toElbonian();
+            converter = new ElbonianArabicConverter(elboNum);
+            int arabicNum = converter.toArabic();
+            converter = new ElbonianArabicConverter(String.valueOf(arabicNum));
+            String elboFromArabic = converter.toElbonian();
+
+            assertEquals(i, arabicNum);
+            assertEquals(elboNum, elboFromArabic);
+            System.out.println(i + " " + arabicNum + " ---- " + elboNum + " " + elboFromArabic);
+        }
+
+
+    }
+
 }

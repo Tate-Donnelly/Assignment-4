@@ -15,9 +15,11 @@ public class Main {
 		Scanner keyboard = new Scanner(System.in);
 		String input = keyboard.nextLine();
 		ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter(input);
-		
-		System.out.print(elbonianArabicConverter.toArabic());
-		
+		String value = elbonianArabicConverter.toElbonian();
+		System.out.println(value);
+		ElbonianArabicConverter elbonianArabicConverter1 = new ElbonianArabicConverter(String.valueOf(value));
+		System.out.println(elbonianArabicConverter1.toArabic());
+
 		
 	}
 }
