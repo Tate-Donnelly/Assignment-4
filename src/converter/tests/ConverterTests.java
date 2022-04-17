@@ -142,7 +142,7 @@ public class ConverterTests {
     //3. If N appears three times, then M cannot appear.
     @Test(expected = MalformedNumberException.class)
     public void test3() throws MalformedNumberException, ValueOutOfBoundsException {
-        ElbonianArabicConverter elbonianArabicConverter= new ElbonianArabicConverter("MMMN");
+        ElbonianArabicConverter elbonianArabicConverter= new ElbonianArabicConverter("NNNM");
         int test = elbonianArabicConverter.toArabic();
     }
     
@@ -184,10 +184,23 @@ public class ConverterTests {
         elbonianArabicConverter.toArabic();
     }
     
+    @Test
+    public void test8_3() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("Z");
+        assertEquals(elbonianArabicConverter.toArabic(), 0);
+    }
+    
     @Test(expected = MalformedNumberException.class)
-    public void test9() throws MalformedNumberException, ValueOutOfBoundsException{
+    public void test9_1() throws MalformedNumberException, ValueOutOfBoundsException{
         ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("NMDCXL");
         elbonianArabicConverter.toArabic();
+    }
+    
+    @Test
+    public void test9_2() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("NMDCLXVI");
+        System.out.println();
+        assertEquals(4444,elbonianArabicConverter.toArabic());
     }
     
     @Test(expected = ValueOutOfBoundsException.class)
@@ -200,6 +213,18 @@ public class ConverterTests {
     public void test10_2() throws MalformedNumberException, ValueOutOfBoundsException{
         ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("-10000");
         elbonianArabicConverter.toElbonian();
+    }
+    
+    @Test
+    public void test10_3() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("9999");
+        assertEquals("NNNDDDLLLVVV",elbonianArabicConverter.toElbonian());
+    }
+    
+    @Test
+    public void test10_4() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("-9999");
+        assertEquals("-NNNDDDLLLVVV",elbonianArabicConverter.toElbonian());
     }
     
     @Test(expected = MalformedNumberException.class)
@@ -217,8 +242,21 @@ public class ConverterTests {
     }
     
     @Test(expected = MalformedNumberException.class)
-    public void test12() throws MalformedNumberException, ValueOutOfBoundsException {
-        ElbonianArabicConverter converter = new ElbonianArabicConverter("lI");
+    public void test11_3() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter converter = new ElbonianArabicConverter("9 9");
+        converter.toElbonian();
+        
+    }
+    
+    @Test(expected = MalformedNumberException.class)
+    public void test12_1() throws MalformedNumberException, ValueOutOfBoundsException {
+        ElbonianArabicConverter converter = new ElbonianArabicConverter("IlI");
+        int test= converter.toArabic();
+    }
+    
+    @Test(expected = MalformedNumberException.class)
+    public void test12_2() throws MalformedNumberException, ValueOutOfBoundsException {
+        ElbonianArabicConverter converter = new ElbonianArabicConverter("m");
         int test= converter.toArabic();
     }
 

@@ -127,18 +127,14 @@ public class ElbonianArabicConverter {
 
     
     private void checkForErrorsElbonian() throws ValueOutOfBoundsException, MalformedNumberException {
-        int elboNum = Integer.parseInt(number);
-
-        if(elboNum > 9999 || elboNum < -9999){
-            throw new ValueOutOfBoundsException("Number must be between -9999 and 9999!");
+        if(isSpaceInBetween()) {
+            throw new MalformedNumberException("Spaces found in between chars (11)");
+        }else{
+            int elboNum = Integer.parseInt(number);
+            if (elboNum > 9999 || elboNum < -9999) {
+                throw new ValueOutOfBoundsException("Number must be between -9999 and 9999!");
+            }
         }
-
-        /*10 The range of numbers that can be represented by Elbonian numerals are the integers from -9999 to 9999.
-        All Arabic integer inputs outside that range will result in a ValueOutOfBounds exception. All other input
-        errors will result in MalformedNumber exceptions.
-        if((Integer.parseInt(number)>9999) ||(Integer.parseInt(number)<-9999)){
-            throw new ValueOutOfBoundsException("Number is either greater than 9999 or less than -9999");
-        }*/
     }
     
     public boolean isInteger(String str){
@@ -225,47 +221,20 @@ public class ElbonianArabicConverter {
         }
     
         //3. If N appears three times, then M cannot appear.
-        int N_counter = 0;
-        for(char ch : charArray){
-            if(ch == 'N'){
-                N_counter++;
-            }
-        }
-        
-        if(N_counter >= 3 && number.contains("M")){
-            throw new MalformedNumberException("Error! Cannot have 3 N's and have an M appear");
-        }
+        checkForMultiples(3, 'N',"M");
     
         //4. If D appears three times, then C cannot appear.
-        checkForThreeDs();
+        checkForMultiples(3, 'D',"C");
     
         //5. If L appears three times, then X cannot appear.
-        int L_counter = 0;
-        for(char ch : charArray){
-            if(ch == 'L'){
-                L_counter++;
-            }
-        }
-    
-        if(L_counter >= 3 && number.contains("X")){
-            throw new MalformedNumberException("Error! Cannot have 3 L's and have an X appear");
-        }
+        checkForMultiples(3, 'L',"X");
     
         //6. If V appears three times, then I cannot appear.
-        int V_counter = 0;
-        for(char ch : charArray){
-            if(ch == 'V'){
-                V_counter++;
-            }
-        }
-    
-        if(V_counter >= 3 && number.contains("I")){
-            throw new MalformedNumberException("Error! Cannot have 3 V's and have an I appear");
-        }
+        checkForMultiples(3, 'V',"I");
         
         
         //8. Z can only appear once and without any other letters or minus sign. -0 is a malformed input.
-        if((number.length()>1 && number.contains("Z"))){
+        if((number.length()>1) && (number.contains("Z"))){
             throw new MalformedNumberException("Z found");
         }
         
@@ -276,7 +245,7 @@ public class ElbonianArabicConverter {
        }
         
         /*12 Elbonian numbers are casesensitive. As a result, lowercase letters would result in malformed numbers.*/
-        if((!isStringUpperCase(charArray)) && number.charAt(0)!='-'){
+        if((!isStringUpperCase(charArray)) && number.charAt(0) != '-'){
             throw new MalformedNumberException("Lowercase letters found (12)");
         }
     }
@@ -295,17 +264,18 @@ public class ElbonianArabicConverter {
         
         return true;
     }
+    
     //4. If D appears three times, then C cannot appear.
-    private void checkForThreeDs() throws MalformedNumberException {
+    private void checkForMultiples(int i, char appearsMultipleTimes, String cannotAppear) throws MalformedNumberException {
         char[] charArray = number.toCharArray();
-        int D_counter = 0;
+        int counter = 0;
         for(char ch : charArray){
-            if(ch == 'D'){
-                D_counter++;
+            if(ch == appearsMultipleTimes){
+                counter++;
             }
         }
     
-        if(D_counter >= 3 && number.contains("C")){
+        if(counter >= i && number.contains(cannotAppear)){
             throw new MalformedNumberException("Error! Cannot have 3 D's and have an C appear");
         }
     }
@@ -314,24 +284,21 @@ public class ElbonianArabicConverter {
         words, the letter X would never appear before the letters N, M, D, C or L. The letter C would never appear
         before N, M or D. The letters are summed together to determine the value.*/
     private boolean isMagnitudeCorrect(String number) {
+        if (number.length() > 1) {
             int first = Integer.parseInt(String.valueOf(number.charAt(0)));
             char[] lastPart = number.toCharArray();
-    
-            if (number.length() >= 2) {
-        
-                for (int i = 0; i < lastPart.length; i++) {
-                    int next = Integer.parseInt(String.valueOf(lastPart[i]));
-                    if (first > next) {
-                        return false;
-                    }
+            
+            for (int i = 0; i < lastPart.length; i++) {
+                int next = Integer.parseInt(String.valueOf(lastPart[i]));
+                if (first > next) {
+                    return false;
                 }
-                
-                return true && isMagnitudeCorrect(String.valueOf(number.substring(1, number.length()).toCharArray()));
-        
-            } else if (number.isEmpty() || number.equals("Z") || number.length() == 1) {
-                return true;
             }
     
+            return isMagnitudeCorrect(String.valueOf(number.substring(1).toCharArray()));
+            
+        }else {
             return true;
         }
+    }
 }
