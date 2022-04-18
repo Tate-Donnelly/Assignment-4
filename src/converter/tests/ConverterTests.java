@@ -173,6 +173,18 @@ public class ConverterTests {
     }
     
     @Test(expected = MalformedNumberException.class)
+    public void test7_2() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("--V");
+        elbonianArabicConverter.toArabic();
+    }
+    
+    @Test(expected = MalformedNumberException.class)
+    public void test7_3() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("--3");
+        elbonianArabicConverter.toArabic();
+    }
+    
+    @Test(expected = MalformedNumberException.class)
     public void test8_1() throws MalformedNumberException, ValueOutOfBoundsException{
         ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("-Z");
         elbonianArabicConverter.toArabic();

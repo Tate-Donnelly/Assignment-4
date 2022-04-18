@@ -144,6 +144,7 @@ public class ElbonianArabicConverter {
                 throw new ValueOutOfBoundsException("Number must be between -9999 and 9999!");
             }
         }
+        multipleMinusSigns();
     }
     
     public boolean isInteger(String str){
@@ -206,8 +207,9 @@ public class ElbonianArabicConverter {
         }
     }
     
-    public void checkForErrorsArabic() throws MalformedNumberException, ValueOutOfBoundsException {
+    public void checkForErrorsArabic() throws MalformedNumberException{
         checkMagnitude();
+        multipleMinusSigns();
         //1. The following letters – M, C, X, and I – can each be repeated up to two times in a row. For example,
         char[] charArray = number.toCharArray();
         for(int i = 0; i < charArray.length - 2; i++){
@@ -256,6 +258,19 @@ public class ElbonianArabicConverter {
         /*12 Elbonian numbers are casesensitive. As a result, lowercase letters would result in malformed numbers.*/
         if((!isStringUpperCase(charArray)) && number.charAt(0) != '-'){
             throw new MalformedNumberException("Lowercase letters found (12)");
+        }
+    }
+    
+    private void multipleMinusSigns() throws MalformedNumberException {
+        char[] charArray = number.toCharArray();
+        int counter = 0;
+        for(char ch : charArray){
+            if(ch == '-'){
+                counter++;
+            }
+        }
+        if(counter>1){
+            throw new MalformedNumberException(counter+ " minus signs found");
         }
     }
     
