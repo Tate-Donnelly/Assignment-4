@@ -311,4 +311,31 @@ public class ConverterTests {
         ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("-10000");
         elbonianArabicConverter.toArabic();
     }
+
+    @Test
+    public void test18() throws MalformedNumberException, ValueOutOfBoundsException {
+        for(int i = -9999; i <= 9999; i++){
+            System.out.println(i);
+            ElbonianArabicConverter converter = new ElbonianArabicConverter(String.valueOf(i));
+            int arabicNum = converter.toArabic();
+            assertEquals(i, arabicNum);
+        }
+    }
+
+    //
+    @Test
+    public void test19() throws MalformedNumberException, ValueOutOfBoundsException {
+        for(int i = -9999; i <= 9999; i++){
+            //Get our elbonian number
+            ElbonianArabicConverter converter = new ElbonianArabicConverter(String.valueOf(i));
+            String elbonianNumber = converter.toElbonian();
+            //Convert our elbonian number again
+            converter = new ElbonianArabicConverter(elbonianNumber);
+            String secondElbonianNumber = converter.toElbonian();
+            //Make sure they are both equal
+            assertEquals(elbonianNumber, secondElbonianNumber);
+        }
+    }
+
+
 }

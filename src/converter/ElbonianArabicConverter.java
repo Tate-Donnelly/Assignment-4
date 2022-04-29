@@ -42,6 +42,15 @@ public class ElbonianArabicConverter {
      * @return An arabic value
      */
     public int toArabic() throws MalformedNumberException, ValueOutOfBoundsException  {
+        if(isInteger(number)){
+            if(Integer.parseInt(number)>9999 || Integer.parseInt(number)<-9999) {
+                throw new ValueOutOfBoundsException("Out of bounds");
+            }else{
+                checkForErrorsElbonian();
+                return Integer.parseInt(number);
+            }
+        }
+
         checkForErrorsArabic();
         boolean isNegative = false;
         char[] charArray = number.toCharArray();
@@ -92,7 +101,16 @@ public class ElbonianArabicConverter {
      * @return An Elbonian value
      */
     public String toElbonian() throws MalformedNumberException, ValueOutOfBoundsException {
+
+        try{
+            Integer.parseInt(number);
+        }catch (NumberFormatException e){
+            checkForErrorsArabic();
+            return number;
+        }
+
         checkForErrorsElbonian();
+
         int ebloNum = Integer.parseInt(number);
         String elboStr = createElbonian(ebloNum);
         return elboStr;
@@ -134,12 +152,6 @@ public class ElbonianArabicConverter {
     
         if(number.equals("-0")) {
             throw new MalformedNumberException("-0");
-        }
-        
-        try{
-            Integer.parseInt(number);
-        }catch (NumberFormatException e){
-            throw new MalformedNumberException("String is not a number!");
         }
 
         if(isSpaceInBetween()) {
@@ -215,11 +227,6 @@ public class ElbonianArabicConverter {
         }
         if(number.equals("-0")) {
             throw new MalformedNumberException("-0");
-        }
-        if(isInteger(number)){
-            if(Integer.parseInt(number)>=9999 || Integer.parseInt(number)<=-9999) {
-                throw new ValueOutOfBoundsException("Out of bounds");
-            }
         }
         
         checkMagnitude();
