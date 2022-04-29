@@ -239,7 +239,7 @@ public class ConverterTests {
         assertEquals("-NNNDDDLLLVVV",elbonianArabicConverter.toElbonian());
     }
     
-    @Test(expected = MalformedNumberException.class)
+    @Test(expected = ValueOutOfBoundsException.class)
     public void test11_1() throws MalformedNumberException, ValueOutOfBoundsException{
         ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("10000");
         elbonianArabicConverter.toArabic();
@@ -286,8 +286,29 @@ public class ConverterTests {
             assertEquals(elboNum, elboFromArabic);
             System.out.println(i + " " + arabicNum + " ---- " + elboNum + " " + elboFromArabic);
         }
-
-
     }
-
+    
+    @Test(expected = MalformedNumberException.class)
+    public void test14() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("-0");
+        elbonianArabicConverter.toArabic();
+    }
+    
+    @Test(expected = MalformedNumberException.class)
+    public void test15() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("");
+        elbonianArabicConverter.toArabic();
+    }
+    
+    @Test(expected = ValueOutOfBoundsException.class)
+    public void test16() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("10000");
+        elbonianArabicConverter.toArabic();
+    }
+    
+    @Test(expected = ValueOutOfBoundsException.class)
+    public void test17() throws MalformedNumberException, ValueOutOfBoundsException{
+        ElbonianArabicConverter elbonianArabicConverter = new ElbonianArabicConverter("-10000");
+        elbonianArabicConverter.toArabic();
+    }
 }

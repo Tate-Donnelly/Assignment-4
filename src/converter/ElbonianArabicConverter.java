@@ -33,7 +33,6 @@ public class ElbonianArabicConverter {
     public ElbonianArabicConverter(String number) throws MalformedNumberException, ValueOutOfBoundsException {
         // TODO check to see if the number is valid, then set it equal to the string
         this.number = number.trim();
-
     }
 
     /**
@@ -100,8 +99,6 @@ public class ElbonianArabicConverter {
     }
 
     private String createElbonian(int elboNum) throws MalformedNumberException, ValueOutOfBoundsException {
-
-
             if (elboNum < 0) {
                 return "-" + createElbonian(Math.abs(elboNum));
             } else if (elboNum >= 3000) {//N
@@ -122,7 +119,7 @@ public class ElbonianArabicConverter {
                 return "I" + createElbonian(elboNum - 1);
             }else if (elboNum == 1) {
                 return "I";
-            }else if(elboNum == 0 && Integer.parseInt(number) == elboNum){
+            }else if(Integer.parseInt(number) == elboNum){
                 return "Z";
         }
             return "";
@@ -130,6 +127,15 @@ public class ElbonianArabicConverter {
 
     
     private void checkForErrorsElbonian() throws ValueOutOfBoundsException, MalformedNumberException {
+        //TODO Are these the right exceptions?
+        if(number.isEmpty()) {
+            throw new MalformedNumberException("Empty String");
+        }
+    
+        if(number.equals("-0")) {
+            throw new MalformedNumberException("-0");
+        }
+        
         try{
             Integer.parseInt(number);
         }catch (NumberFormatException e){
@@ -157,8 +163,7 @@ public class ElbonianArabicConverter {
     }
     
     public void checkMagnitude() throws MalformedNumberException {
-        if(!isInteger(number)) {
-            char[] charArray = number.toCharArray();
+        char[] charArray = number.toCharArray();
         /*9 Numbers are represented by the letters from the greatest magnitude down to the least magnitude. In other
         words, the letter X would never appear before the letters N, M, D, C or L. The letter C would never appear
         before N, M or D. The letters are summed together to determine the value.*/
@@ -202,12 +207,21 @@ public class ElbonianArabicConverter {
             if (!isMagnitudeCorrect(numberStr)) {
                 throw new MalformedNumberException("The magnitude is not correct");
             }
-        }else{
-            throw new MalformedNumberException("Is Arabic, expected Elbonian");
-        }
     }
     
-    public void checkForErrorsArabic() throws MalformedNumberException{
+    public void checkForErrorsArabic() throws MalformedNumberException, ValueOutOfBoundsException {
+        if(number.isEmpty()) {
+            throw new MalformedNumberException("Empty String");
+        }
+        if(number.equals("-0")) {
+            throw new MalformedNumberException("-0");
+        }
+        if(isInteger(number)){
+            if(Integer.parseInt(number)>=9999 || Integer.parseInt(number)<=-9999) {
+                throw new ValueOutOfBoundsException("Out of bounds");
+            }
+        }
+        
         checkMagnitude();
         multipleMinusSigns();
         //1. The following letters – M, C, X, and I – can each be repeated up to two times in a row. For example,
